@@ -1,58 +1,89 @@
-// src/Three.ts
-import * as THREE from "three";
-import { Howl, Howler } from "howler";
+import * as T from 'three'
+// @ts-ignore
+import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
+import dat from 'dat.gui'
 
 export class Three {
-  private scene: THREE.Scene;
-  private camera: THREE.PerspectiveCamera;
-  private renderer: THREE.WebGLRenderer;
-  private geometry: THREE.BufferGeometry;
-  private material: THREE.Material;
-  private mesh: THREE.Mesh;
-  private audio: Howl;
+    private scene!: T.Scene;
+    private camera!: T.PerspectiveCamera;
+    private renderer!: T.WebGLRenderer;
+    private controls!: OrbitControls;
 
-  constructor() {
-    this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(
-      75,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      1000
-    );
-    this.renderer = new THREE.WebGLRenderer();
-    this.geometry = new THREE.BoxGeometry();
-    this.material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    this.mesh = new THREE.Mesh(this.geometry, this.material);
+    private time = 0;
+    private debug = true;
+    private gui !: dat.GUI;
 
-    this.scene.add(this.mesh);
-    this.camera.position.z = 5;
-    this.audio = new Howl({
-      src: ["assets/music.mp3"], // replace 'path/to/sound.mp3' with the actual path to your mp3 file in the 'assets' folder
-      loop: true,
-      volume: 0.5,
-      //   spatialSound: true,
-    });
-    this.init();
-  }
+    constructor(canvas: HTMLCanvasElement) {
+        this.init(canvas);
+    }
 
-  private init(): void {
-    document.body.appendChild(this.renderer.domElement);
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.render();
-  }
+    init(canvas: HTMLCanvasElement) {
+        this.scene = new T.Scene();
+        this.camera = new T.PerspectiveCamera(
+          75,
+          window.innerWidth / window.innerHeight,
+          0.1,
+          1000
+        );
+        this.camera.position.set(0, 0, 5); // Set an initial camera position
 
-  private render(): void {
-    requestAnimationFrame(() => this.render());
-    this.mesh.rotation.x += 0.01;
-    this.mesh.rotation.y += 0.01;
-    this.renderer.render(this.scene, this.camera);
-  }
+        this.renderer = new T.WebGLRenderer({
+            canvas,
+            antialias: true,
+            alpha: true,
+        });
 
-  public addAudioListener(): void {
-    window.addEventListener("scroll", () => {
-      // Change audio properties based on scroll position
-      const volume = window.scrollY / window.innerHeight;
-      this.audio.volume(volume);
-    });
-  }
+        this.setting(); // Initialize general settings
+        this.setupControls(); // Initialize controls
+        this.render(); // Start rendering loop
+    }
+
+    render = () => {
+        this.time += 1;
+        this.renderer.setSize(window.innerWidth, window.innerHeight);
+        window.requestAnimationFrame(this.render);
+
+        this.controls.update();
+
+        if (this.debug) {
+            // console.log(this.time);
+        }
+
+        this.renderer.render(this.scene, this.camera);
+    }
+
+    setting() {
+        this.renderer.setClearColor(0xff0000,1)
+
+    }
+    private setupControls() {
+        // Initialize OrbitControls
+        this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+        this.controls.enableDamping = true;
+        this.controls.dampingFactor = 0.05;
+        this.controls.rotateSpeed = 1.0;
+
+        if (this.debug) {
+            this.setupDebugControls();
+        }
+    }
+    private setupDebugControls() {
+        this.gui = new dat.GUI();
+
+        const cameraFolder = this.gui.addFolder('Camera');
+        cameraFolder.add(this.camera.position, 'x', -10, 10);
+        cameraFolder.add(this.camera.position, 'y', -10, 10);
+        cameraFolder.add(this.camera.position, 'z', -10, 10);
+        cameraFolder.open();
+
+        // Add more debug controls for OrbitControls or other elements
+        const controlFolder = this.gui.addFolder('OrbitControls');
+        controlFolder.add(this.controls, 'enableDamping');
+        controlFolder.add(this.controls, 'dampingFactor', 0.01, 0.1);
+        controlFolder.add(this.controls, 'rotateSpeed', 0.1, 2.0);
+        controlFolder.open();
+
+    }
+
+
 }
