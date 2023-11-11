@@ -33,6 +33,7 @@ export class Three {
             alpha: true,
         });
 
+        this.addItems()
         this.setting(); // Initialize general settings
         this.setupControls(); // Initialize controls
         this.render(); // Start rendering loop
@@ -45,17 +46,18 @@ export class Three {
 
         this.controls.update();
 
+        this.renderer.render(this.scene, this.camera);
+
         if (this.debug) {
             // console.log(this.time);
         }
-
-        this.renderer.render(this.scene, this.camera);
     }
 
     setting() {
-        this.renderer.setClearColor(0xff0000,1)
+        // this.renderer.setClearColor(0xff0000, 1)
 
     }
+
     private setupControls() {
         // Initialize OrbitControls
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
@@ -67,6 +69,7 @@ export class Three {
             this.setupDebugControls();
         }
     }
+
     private setupDebugControls() {
         this.gui = new dat.GUI();
 
@@ -86,4 +89,18 @@ export class Three {
     }
 
 
+    private addItems() {
+        // const material = T
+        const geometry = new T.PlaneGeometry(
+          1,1
+        )
+        const material = new T.MeshBasicMaterial({
+// wireframe:true,
+            side:2
+          }
+
+        )
+        const mesh=new T.Mesh(geometry,material)
+        this.scene.add(mesh)
+    }
 }
