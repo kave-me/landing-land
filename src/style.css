@@ -1,6 +1,8 @@
 /* src/style.css */
 :root {
     --primary-background: hsla(150deg, 20%, 98%, 1);
+    --primary-trophey: hsla(150deg, 30%, 75%, .8);
+    --primary-accent: hsla(150deg, 50%, 10%, 1);
     --secondary-background: hsla(150deg, 70%, 70%, 1);
     --accent-color: hsla(200deg, 70%, 70%, 1);
     --hover-gradient: linear-gradient(145deg, hsla(20deg, 70%, 70%, 1), hsla(120deg, 70%, 70%, 1));
@@ -17,6 +19,8 @@ body {
     font-family: "Open Sans", "Arial", sans-serif;
     background-color: var(--primary-background);
     color: white;
+    position: relative;
+    z-index: 1;
 }
 
 h1,
@@ -32,7 +36,12 @@ h3 {
 }
 
 canvas {
-
+    position: fixed;
+    background-color: red;
+    top:0;
+    left:0;
+    height: 100%;
+z-index: -1;
     /*overflow: hidden;*/
     /*!*margin: auto;*!*/
     /*width: 100%;*/
@@ -41,34 +50,210 @@ canvas {
 
 .portfolio {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 20px;
     padding: 20px;
+    align-items: center;
+    justify-items: center;
+    justify-content: center;
+    max-width: 2048px;
+    margin: 0 auto;
+
+    @media screen and (max-width: 1024px) {
+        grid-template-columns: repeat(1, 1fr);
+        grid-gap: 80px;
+    }    @media screen and (min-width: 1600px) {
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 80px;
+    }
+}
+.hero{
+    position: relative;
+    z-index: 1;
+}
+.hero h1{
+    top:50%;
+    left:50%;
+    transform:translateX(-50%) translateY(-50%);
+    /*filter:saturate(90%);*/
+    mix-blend-mode: screen;
+    /*isolation: isolate;*/
+    color: #ffffa2;
+border:5px solid black;
+    text-transform: uppercase;
+    text-align: center;
+    text-decoration-style: wavy;
+    text-decoration-color: green;
+    text-decoration-line:underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 1rem;
+
+    margin:0;
+    padding:0;
+    /*background-color: red;*/
+    font-size: 10rem;
+    font-family: 'Playfair', serif;
+
+    position: absolute;
+    z-index: 2;
 }
 
-.card {
-    background-color: var(--secondary-background);
-    padding: 0.5rem 1rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+header .hero__img{
+    width: 100%;
+    height: 50vh;
+    /*background-color: red;*/
     overflow: hidden;
 }
+header  img {
+    width: 100%;
+    /*height: 50vh;*/
+    /*display: none;*/
+    object-fit: contain;
+    object-position: center;
+}
+.about-me {
+    color:var(--primary-accent);
+    /*background-color: hsla(150deg,50%,50%,1);*/
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.about-me h2{
+    font-family: 'Playfair', serif;
+    font-size: 5rem;
+    color: var(--primary-accent);
+}
+.about-me p{
+    font-family: 'Playfair', serif;
+    font-size: 1rem;
+    color: var(--primary-accent);
+}
 
-.card header img {
+.about-me button{
+    font-family: 'Playfair', serif;
+    font-size: 1.5rem;
+    line-height: 1.5rem;
+    font-weight: bold;
+    color: hsla(250deg,50%,85%,1);
+    background-color: hsla(250deg,75%,50%,1);
+    box-shadow: 0 2px 5px black;
+    padding: 1rem 2rem;
+    border-radius: .5rem;
+    border:2px solid hsla(100deg,50%,20%,1);
+    cursor: pointer;
+    transition: 300ms ease-in-out all;
+}.about-me button:hover{
+    transform: scale(1.05);
+ }
+
+.about-me button:active{
+    transform: scale(.9);
+}
+
+
+
+.card {
+    color: var(--primary-accent);
+    padding: 0.5rem 1rem 0.5rem 3rem;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 30rem;
+    height: auto;
+    max-width: 100%;
+    cursor: pointer;
+    --img-height: 40rem;
+}
+
+.card:nth-child(odd) .image-wrapper {
+    width: 100%;
+    height: calc(var(--img-height) / 1.8);
+    @media screen and (max-width: 1024px) {
+    margin-top: calc(var(--img-height) / 10);
+    }
+
+}
+
+.card:nth-child(even) .image-wrapper {
+    width: 100%;
+    height: var(--img-height);
+
+}
+
+
+.card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
     border-radius: 2px;
 
-    width: 100%;
-    height: auto;
-    display: block;
 }
 
-.card footer {
-    padding: 10px;
-    text-align: right;
+.card h3 {
+    font-family: 'Playfair', serif;
+    font-size: 3.5rem;
+    margin: 1rem 0 0 0;
+    line-height: 2.5rem;
+    font-weight: 300;
+    border-radius: 1rem;
+    padding: .05rem;
+
 }
 
-.card footer time {
+article {
+    position: relative;
+}
+
+article aside {
+    position: absolute;
+    top: 0;
+    left: -55%;
+    transform: rotate(-90deg) translateX(50%) translateY(50%);
+    transform-origin: top right;
+    width: fit-content;
+    gap: 30px;
+    padding: 5px;
+    margin: 0;
+    font-family: 'monospace', 'arial', sans-serif;
+    font-size: .8rem;
+    font-weight: 100;
+    display: flex;
+    align-items: center;
+}
+
+
+article footer > div {
+    font-size: .8rem;
+    color: hsla(150deg, 100%, 10%, 1);
+    position: absolute;
+    left: -2.5rem;
+    min-width: fit-content;
+    transform-origin: top left;
+    gap: 1rem;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    font-family: 'monospace', 'arial', sans-serif;
+}
+
+article footer > div:nth-child(even) {
+    /*margin-bottom: 5rem;*/
+}
+
+article footer > p {
+    font-family: 'Playfair', serif;
+    font-size: 1.5rem;
     font-style: italic;
-    margin-right: 10px;
+    font-weight: 100;
+    align-items: center;
+    line-height: 1rem;
+    padding: 1rem 0 0 0;
+    margin: 0;
 }
